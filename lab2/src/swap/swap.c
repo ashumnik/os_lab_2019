@@ -1,6 +1,6 @@
 void Swap(char *left, char *right)
 {
-	int c = *left;
+	char c = *left;
 	*left = *right;
 	*right = c;
 }
