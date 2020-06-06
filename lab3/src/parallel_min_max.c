@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
         if (with_files) {
           // use files here
           FILE *f;
-	  if (i == 0)f = fopen("data.txt", "w");
+	  if (i == 0) f = fopen("data.txt", "w");
 	  else f = fopen("data.txt", "a+");
 	  fprintf(f, "%d\n", min_max.max);
 	  fclose(f);
@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
       f = fopen("data.txt", "r");
       for (int j = 0; j < i; j++) {
         fscanf(f, "%d", &NewMinMax.min);
-        fscanf(f, "%d", &NewMinMax.min);
+        fscanf(f, "%d", &NewMinMax.max);
       }  
       fscanf(f, "%d", &NewMinMax.min);
       fscanf(f, "%d", &NewMinMax.max);
