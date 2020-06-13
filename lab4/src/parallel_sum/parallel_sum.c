@@ -101,9 +101,9 @@ int main(int argc, char **argv) {
     struct SumArgs args[threads_num];
     int Part_Size = array_size / threads_num;
 
-    // start time
     struct timeval start_time;
     gettimeofday(&start_time, NULL);
+
     for (size_t i = 0; i < threads_num; i++) {		
       if (i == threads_num - 1) {
         args[i].array = array;
@@ -137,7 +137,6 @@ int main(int argc, char **argv) {
   gettimeofday(&finish_time, NULL);
   double elapsed_time = (finish_time.tv_sec - start_time.tv_sec) * 1000.0;
   elapsed_time += (finish_time.tv_usec - start_time.tv_usec) / 1000.0;
-  printf("Total: %d\n", total_sum);
   printf("Elapsed time: %fms\n", elapsed_time);
   return 0;
 }
