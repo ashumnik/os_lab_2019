@@ -215,7 +215,7 @@ int main(int argc, char **argv) {
 			struct MinMax NewMinMax;
 			struct timeval timeout; 
 			fd_set set; 
-			timeout.tv_sec = 2; 
+			timeout.tv_sec = 5; 
 			timeout.tv_usec = 0; 
 			
 			FD_ZERO(&set);
@@ -225,9 +225,11 @@ int main(int argc, char **argv) {
 
 			if (ret == -1) {
 			  printf("ERROR!\n");
+			  return -1;
 			}
 			else if (ret == 0) {
  			  printf("TIMEOUT\n");
+			  return -1;
 			}
 			else {
  			  if (FD_ISSET(file_pipes[0], &set))
