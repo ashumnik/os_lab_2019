@@ -117,12 +117,12 @@ int main(int argc, char **argv) {
       }
     }
   
-  for (uint32_t i = 0; i < threads_num; i++) {
-    if (pthread_create(&threads[i], NULL, ThreadSum, (void *)&args)) {
-      printf("Error: pthread_create failed!\n");
-      return 1;
+    for (uint32_t i = 0; i < threads_num; i++) {
+      if (pthread_create(&threads[i], NULL, ThreadSum, (void *)&args)) {
+        printf("Error: pthread_create failed!\n");
+        return 1;
+      }
     }
-  }
 
   int total_sum = 0;
   for (uint32_t i = 0; i < threads_num; i++) {

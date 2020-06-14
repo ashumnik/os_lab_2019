@@ -7,6 +7,9 @@
 #include <unistd.h>
 #include <signal.h>  
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -16,13 +19,22 @@
 #include "find_min_max.h"
 #include "utils.h"
 
+#define STDIN 0
+
+//struct timeval { 
+//    long    tv_sec;         /* seconds */
+//    long    tv_usec;        /* microseconds */
+//};
+
 pid_t *child_pids = NULL;
 int pids_num = 0;
 
 void KillChild(int signal)
 {
+	//printf("pids_num %d\n", pids_num);
 	for(int i = 0; i < pids_num; i++){
-		printf("killing %d", child_pids[i]);
+		printf("killing %d\n", child_pids[i]);
+		//fflush(stdout);
 		kill(child_pids[i], SIGTERM);
 	}
 }
@@ -130,7 +142,7 @@ int main(int argc, char **argv) {
 		if (child_pid >= 0) {
 			active_child_processes += 1;
 			if (child_pid == 0) {
-
+				sleep(10); //остановка дочернего роцесса на 10 сек
 				struct MinMax min_max;
 				int Part_Size = array_size / pnum;
 				if (i == pnum - 1) {
@@ -161,8 +173,11 @@ int main(int argc, char **argv) {
 		}
 	}
 
+	//printf("aaa\n");
+	//printf("time %d\n", time);
 	signal(SIGALRM, KillChild);
 	alarm(time);
+
 	
 	while (active_child_processes > 0) {
 		int status;
@@ -171,6 +186,7 @@ int main(int argc, char **argv) {
 		active_child_processes -= 1;
 	}
 	
+	//printf("ddddd\n");
 	struct MinMax min_max;
 	min_max.min = INT_MAX;
 	min_max.max = INT_MIN;
@@ -195,14 +211,34 @@ int main(int argc, char **argv) {
 
 		}
 		else {
+/////////////////////////////////////////////////////////////////////////////////////////////
 			struct MinMax NewMinMax;
-			read(file_pipes[0], &NewMinMax, sizeof(struct MinMax));
+			struct timeval timeout; 
+			fd_set set; 
+			timeout.tv_sec = 2; 
+			timeout.tv_usec = 0; 
+			
+			FD_ZERO(&set);
+			FD_SET(file_pipes[0], &set);
 
+			int ret = select(FD_SETSIZE+1, &set, NULL, NULL, &timeout);
+
+			if (ret == -1) {
+			  printf("ERROR!\n");
+			}
+			else if (ret == 0) {
+ 			  printf("TIMEOUT\n");
+			}
+			else {
+ 			  if (FD_ISSET(file_pipes[0], &set))
+			    read(file_pipes[0], &NewMinMax, sizeof(struct MinMax));
+			}
+			
 			min = NewMinMax.min;
 			max = NewMinMax.max;
 
 		}
-
+/////////////////////////////////////////////////////////////////////////////////////////////
 		if (min < min_max.min) min_max.min = min;
 		if (max > min_max.max) min_max.max = max;
 	}
