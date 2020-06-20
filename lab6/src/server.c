@@ -21,12 +21,12 @@ struct FactorialArgs {
   uint64_t mod;
 };
 
+
 uint64_t Factorial(const struct FactorialArgs *args) {
-  uint64_t ans = 1;
 
-  for(uint64_t i = args->begin; i < args->end; i++)
-    ans = MultModulo(ans, i, args->mod);
-
+    uint64_t ans = 1;
+	for(uint64_t i = args->begin; i < args->end; i++)
+		ans = MultModulo(ans, i, args->mod);
   return ans;
 }
 
@@ -57,17 +57,17 @@ int main(int argc, char **argv) {
       switch (option_index) {
       case 0:
         port = atoi(optarg);
-        if (port <= 0) {
-          printf("port is a positive number\n");
-          return 1;
-        }
+         if (port <= 0) {
+                printf("port is a positive number\n");
+                 return 1;
+                }
         break;
       case 1:
         tnum = atoi(optarg);
-        if (tnum <= 0) {
-          printf("tnum is a positive number\n");
-          return 1;
-        }
+         if (tnum <= 0) {
+                printf("tnum is a positive number\n");
+                 return 1;
+                }
         break;
       default:
         printf("Index %d is out of options\n", option_index);
@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
   }
 
   if (port == -1 || tnum == -1) {
-    fprintf(stderr, "Using: %s --port [num] --tnum [num]\n", argv[0]);
+    fprintf(stderr, "Using: %s --port 20001 --tnum 4\n", argv[0]);
     return 1;
   }
 
@@ -103,7 +103,7 @@ int main(int argc, char **argv) {
 
   int err = bind(server_fd, (struct sockaddr *)&server, sizeof(server));
   if (err < 0) {
-    fprintf(stderr, "Can not bind to socket!\n");
+    fprintf(stderr, "Can not bind to socket!");
     return 1;
   }
 
@@ -156,11 +156,13 @@ int main(int argc, char **argv) {
       uint64_t dx = (end - begin)/tnum;
 
       for (uint32_t i = 0; i < tnum; i++) {
+          
         args[i].begin = begin + i*dx;
         args[i].end   = (i == (tnum - 1)) ? end : begin + (i+1)*dx;
         args[i].mod   = mod;
 
-        if (pthread_create(&threads[i], NULL, ThreadFactorial, (void *)&args[i])) {
+        if (pthread_create(&threads[i], NULL, ThreadFactorial,
+                           (void *)&args[i])) {
           printf("Error: pthread_create failed!\n");
           return 1;
         }

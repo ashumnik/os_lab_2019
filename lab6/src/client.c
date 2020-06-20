@@ -105,7 +105,7 @@ int main(int argc, char **argv) {
   }
 
   if (k == -1 || mod == -1 || !strlen(servers)) {
-    fprintf(stderr, "Using: %s --k [num] --mod [num] --servers /path/to/file\n",
+    fprintf(stderr, "Using: %s --k 1000 --mod 5 --servers /path/to/file\n",
             argv[0]);
     return 1;
   }
